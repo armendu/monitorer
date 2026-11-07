@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import DisplayDial
+@testable import Monitorer
 
 @MainActor
 @Suite struct MonitorModelTests {

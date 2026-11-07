@@ -3,6 +3,12 @@
 Every pull request raises the version (`make bump`) and adds a section here for it, written for
 people who use the app.
 
+## 1.5.0 (2026-11-07)
+
+* DisplayDial is now called Monitorer. Presets, each monitor's default brightness and contrast,
+  and your settings carry over the first time Monitorer opens. If you'd turned on Launch at
+  login, turn it on again in Settings › General, and remove DisplayDial from Login Items.
+
 ## 1.4.0 (2026-11-07)
 
 The first version in this repository.

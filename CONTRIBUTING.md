@@ -1,6 +1,6 @@
-# Contributing to DisplayDial
+# Contributing to Monitorer
 
-Thanks for helping. DisplayDial talks to real monitors, and monitors differ, so the bar for
+Thanks for helping. Monitorer talks to real monitors, and monitors differ, so the bar for
 changes that touch DDC is "tried on a real monitor, and you say which one". Everything else is
 ordinary.
 

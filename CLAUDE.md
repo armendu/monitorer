@@ -1,4 +1,4 @@
-# Working on DisplayDial
+# Working on Monitorer
 
 A SwiftUI menu bar app that controls an external monitor over DDC/CI by running
 [m1ddc](https://github.com/waydabber/m1ddc). See [README.md](README.md) for the user-facing
@@ -47,8 +47,8 @@ spans everything. Keep the subject under about 72 characters.
 | Scope | Covers |
 |---|---|
 | `ddc` | `Model/M1DDC.swift`: running m1ddc, parsing its output, the serial queue and timeout |
-| `app` | the rest of `Sources/DisplayDial/Model` and `App`: state, presets, defaults, hot keys |
-| `ui` | `Sources/DisplayDial/Views` |
+| `app` | the rest of `Sources/Monitorer/Model` and `App`: state, presets, defaults, hot keys |
+| `ui` | `Sources/Monitorer/Views` |
 | `build` | `Makefile`, `build.sh`, `Package.swift`, `Scripts/`, the icon |
 | `ci` | `.github/` |
 
@@ -70,7 +70,7 @@ Everything runs from the Makefile; `make` on its own lists every target.
 
 ```sh
 make build       # Debug build, a compile check
-make release     # Release build, packaged as build/DisplayDial.app
+make release     # Release build, packaged as build/Monitorer.app
 make test        # unit tests, against a fake m1ddc
 make live-test   # read-only check against the connected monitor
 make run         # Release build, then launch it (quits a running copy first)
@@ -82,12 +82,12 @@ make bump        # raise VERSION (PART=minor|major)
 ## Layout
 
 ```
-Sources/DisplayDial/
+Sources/Monitorer/
   App/              entry point, window snapshots
   Model/            M1DDC (process wrapper and parsing), MonitorModel, presets, hot keys, preferences
   Views/            the menu bar panel and its menu-item styles
   Views/Settings/   one file per Settings tab
-Tests/DisplayDialTests/   Swift Testing; FakeRunner stands in for m1ddc
+Tests/MonitorerTests/   Swift Testing; FakeRunner stands in for m1ddc
 Resources/AppIcon.icns    checked in; Scripts/make-icon.swift draws it
 ```
 
@@ -131,9 +131,9 @@ monitor's default. Writes are clamped to the monitor's range.
 **Apple panels show up in `display list`.** The built-in screen (and a Studio Display) report
 vendor `0x0610` and don't speak DDC; they're filtered out.
 
-**"Default" brightness and contrast are DisplayDial's, not the monitor's.** The factory reset
+**"Default" brightness and contrast are Monitorer's, not the monitor's.** The factory reset
 is VCP `0x04`/`0x05`, which m1ddc can't send. So each monitor's defaults (keyed by display UUID)
-start as the first values DisplayDial reads from it, and can be edited in Settings › Presets. A
+start as the first values Monitorer reads from it, and can be edited in Settings › Presets. A
 snapshot copy never records them.
 
 **Keyboard shortcuts can fire before the panel was ever opened.** `nudge` reads the monitor
@@ -147,12 +147,17 @@ AppleScript to System Events. `make shot` has the app render its own windows wit
 from code. Liquid Glass doesn't show up in those captures. A snapshot copy reads the monitor but
 never writes to it (`RunMode.isReadOnly`), so it can run beside the copy in use.
 
-**Don't `pkill DisplayDial` while testing** other than through `make run`, which means to
+**Don't `pkill Monitorer` while testing** other than through `make run`, which means to
 replace the running copy. Stop anything else you launch by its PID.
 
 **Input switching hasn't been tried on hardware.** Switching away from DisplayPort blanks the
 Mac's screen, and the Mac may then not see the monitor to switch back. That's why the panel
 asks before switching rather than acting on one click.
+
+**The app was called DisplayDial until 1.5.0**, bundle ID `com.armend.DisplayDial`. Settings
+are keyed by bundle ID, so `SettingsMigration` copies `PreferenceKey.all` from the old domain
+once at launch. A new user-chosen setting belongs in `PreferenceKey.all`, or a future rename
+loses it. The old name is meant to appear in `SettingsMigration.swift` and nowhere else.
 
 **Launch at login is untested.** `SMAppService.mainApp.register()` may refuse an ad hoc
 signed app outside ~/Applications; the toggle surfaces whatever error it returns.

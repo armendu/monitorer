@@ -41,7 +41,7 @@ final class HotKeys {
         registered[id]?.action()
     }
 
-    fileprivate static let signature: OSType = 0x4444_444C  // "DDDL"
+    fileprivate static let signature: OSType = 0x4D4E_5452  // "MNTR"
 
     private func installHandlerIfNeeded() {
         guard handler == nil else { return }

@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import DisplayDial
+@testable import Monitorer
 
 /// Records m1ddc invocations and answers them from a handler instead of spawning a process.
 ///
@@ -182,7 +182,7 @@ extension UserDefaults {
 
 private enum ScratchSuites {
     static let directory: URL = {
-        let directory = FileManager.default.temporaryDirectory.appending(path: "DisplayDialTests-\(getpid())")
+        let directory = FileManager.default.temporaryDirectory.appending(path: "MonitorerTests-\(getpid())")
         try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
         atexit { try? FileManager.default.removeItem(at: ScratchSuites.directory) }
         return directory

@@ -22,7 +22,7 @@ jobs:
   build:
     # Pinned rather than `macos-latest`, so an image migration can't change the toolchain
     # under a pull request. The app needs the macOS 26 SDK for Liquid Glass.
-    # No monitor is involved: this proves DisplayDial compiles, not that DDC works.
+    # No monitor is involved: this proves Monitorer compiles, not that DDC works.
     runs-on: macos-26
     timeout-minutes: 20
     steps:

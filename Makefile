@@ -1,9 +1,9 @@
-# Everything DisplayDial needs, from the command line.
+# Everything Monitorer needs, from the command line.
 #
 # `make` on its own lists every target, which is the only documentation of this file that
 # cannot go stale.
 
-APP   := build/DisplayDial.app
+APP   := build/Monitorer.app
 SHOTS := build/screenshots
 
 .DEFAULT_GOAL := help
@@ -15,30 +15,30 @@ help: ## list every target
 build: ## Debug build, a compile check
 	swift build
 
-release: ## Release build, packaged as build/DisplayDial.app
+release: ## Release build, packaged as build/Monitorer.app
 	@./build.sh
 
 test: ## run the unit tests (no monitor needed)
 	swift test
 
 live-test: ## read-only check against the connected monitor
-	DISPLAYDIAL_LIVE=1 swift test --filter LiveMonitorTests
+	MONITORER_LIVE=1 swift test --filter LiveMonitorTests
 
 run: release ## build Release, then launch it (quits a running copy first)
-	-@pkill -TERM -x DisplayDial; sleep 1
+	-@pkill -TERM -x Monitorer; sleep 1
 	open "$(APP)"
 
-# shot starts a second copy beside any DisplayDial already running and stops only that copy.
+# shot starts a second copy beside any Monitorer already running and stops only that copy.
 # In snapshot mode the app reads the monitor but never writes to it.
 shot: release ## save the app's windows to build/screenshots (TAB=general|presets|about adds Settings)
 	@rm -rf "$(SHOTS)"
-	@DISPLAYDIAL_SNAPSHOT_DIR="$(CURDIR)/$(SHOTS)" DISPLAYDIAL_SETTINGS_TAB="$(TAB)" \
-		"$(APP)/Contents/MacOS/DisplayDial" >/dev/null 2>&1 & pid=$$!; sleep 6; kill -TERM $$pid; sleep 1
+	@MONITORER_SNAPSHOT_DIR="$(CURDIR)/$(SHOTS)" MONITORER_SETTINGS_TAB="$(TAB)" \
+		"$(APP)/Contents/MacOS/Monitorer" >/dev/null 2>&1 & pid=$$!; sleep 6; kill -TERM $$pid; sleep 1
 	@ls "$(SHOTS)"
 
 install: release ## copy the app to ~/Applications, where Launch at login expects it
 	@mkdir -p ~/Applications
-	rm -rf ~/Applications/DisplayDial.app
+	rm -rf ~/Applications/Monitorer.app
 	cp -R "$(APP)" ~/Applications/
 
 icon: ## redraw Resources/AppIcon.icns from Scripts/make-icon.swift

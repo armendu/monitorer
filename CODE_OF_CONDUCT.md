@@ -1,6 +1,6 @@
 # Code of conduct
 
-DisplayDial follows the [Contributor Covenant, version 2.1](https://www.contributor-covenant.org/version/2/1/code_of_conduct/).
+Monitorer follows the [Contributor Covenant, version 2.1](https://www.contributor-covenant.org/version/2/1/code_of_conduct/).
 
 In short: be respectful, assume good intent, welcome newcomers, and keep criticism about the
 work rather than the person. Harassment, insults, and personal or political attacks aren't

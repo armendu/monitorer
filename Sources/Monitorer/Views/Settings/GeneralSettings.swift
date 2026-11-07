@@ -57,7 +57,7 @@ struct GeneralSettings: View {
                     Button("Quit \(AppInfo.name)") { NSApp.terminate(nil) }
                 }
             } footer: {
-                Text("DisplayDial runs from the menu bar. While its menu is open, ⌘Q quits it too.")
+                Text("Monitorer runs from the menu bar. While its menu is open, ⌘Q quits it too.")
             }
         }
         .formStyle(.grouped)
