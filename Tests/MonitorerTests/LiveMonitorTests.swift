@@ -1,11 +1,11 @@
 import Foundation
 import Testing
-@testable import DisplayDial
+@testable import Monitorer
 
 /// Read-only checks against a real monitor through the installed m1ddc.
-/// Opt in with: DISPLAYDIAL_LIVE=1 swift test --filter LiveMonitorTests
+/// Opt in with: MONITORER_LIVE=1 swift test --filter LiveMonitorTests
 @MainActor
-@Suite(.enabled(if: ProcessInfo.processInfo.environment["DISPLAYDIAL_LIVE"] == "1"))
+@Suite(.enabled(if: ProcessInfo.processInfo.environment["MONITORER_LIVE"] == "1"))
 struct LiveMonitorTests {
     @Test func readsConnectedMonitor() async throws {
         let model = MonitorModel(defaults: .scratch())

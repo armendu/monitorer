@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import DisplayDial
+@testable import Monitorer
 
 @Suite struct ParsingTests {
     @Test func parsesBuiltInDisplay() {

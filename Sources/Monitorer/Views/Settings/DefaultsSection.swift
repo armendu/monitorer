@@ -25,7 +25,7 @@ struct DefaultsSection: View {
         } header: {
             Text("Default Brightness & Contrast")
         } footer: {
-            Text("Reset in the menu bar goes back to these. They start as the values DisplayDial first read from this monitor; the monitor's own factory reset isn't available over m1ddc.")
+            Text("Reset in the menu bar goes back to these. They start as the values Monitorer first read from this monitor; the monitor's own factory reset isn't available over m1ddc.")
         }
     }
 

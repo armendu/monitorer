@@ -39,7 +39,7 @@ final class MonitorModel {
     }
 
     /// Per display UUID. m1ddc can't send the monitor's own factory reset (VCP 0x04/0x05),
-    /// so "default" is what DisplayDial first read from that monitor, or what the user set.
+    /// so "default" is what Monitorer first read from that monitor, or what the user set.
     private(set) var pictureDefaults: [String: PictureDefaults] {
         didSet { defaults.set(try? JSONEncoder().encode(pictureDefaults), forKey: PreferenceKey.pictureDefaults) }
     }

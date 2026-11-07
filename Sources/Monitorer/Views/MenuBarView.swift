@@ -11,7 +11,7 @@ struct MenuBarView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            // Failures surface here: the panel is the only place DisplayDial has.
+            // Failures surface here: the panel is the only place Monitorer has.
             if let error = model.errorMessage {
                 HStack(alignment: .firstTextBaseline) {
                     Label(error, systemImage: "exclamationmark.triangle.fill")
@@ -209,7 +209,7 @@ struct MenuBarView: View {
 
     private var notInstalled: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text("DisplayDial needs m1ddc to talk to your monitor. Install it with Homebrew, then reopen this menu.")
+            Text("Monitorer needs m1ddc to talk to your monitor. Install it with Homebrew, then reopen this menu.")
                 .font(.callout)
                 .foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)

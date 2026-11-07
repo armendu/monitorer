@@ -1,13 +1,14 @@
 import SwiftUI
 
 @main
-struct DisplayDialApp: App {
+struct MonitorerApp: App {
     @State private var model: MonitorModel
     @State private var shortcuts: BrightnessShortcuts
 
     init() {
         // Left over from a quit with Settings open, or from `make shot TAB=…`.
         SettingsTab.reset()
+        if !RunMode.isReadOnly { SettingsMigration.run(into: .standard) }
         let model = MonitorModel(defaults: .standard)
         let shortcuts = BrightnessShortcuts(model: model)
         shortcuts.apply(enabled: UserDefaults.standard.bool(forKey: PreferenceKey.brightnessShortcuts))

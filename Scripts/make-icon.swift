@@ -1,4 +1,4 @@
-// Draws DisplayDial's app icon into an .iconset that `iconutil` turns into Resources/AppIcon.icns.
+// Draws Monitorer's app icon into an .iconset that `iconutil` turns into Resources/AppIcon.icns.
 // Run through `make icon`; the .icns is checked in, so a normal build doesn't need this.
 //
 // The shape follows the macOS icon grid: an 824-point rounded square on a 1024 canvas, so the

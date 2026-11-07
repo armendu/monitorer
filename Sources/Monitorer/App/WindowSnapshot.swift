@@ -4,15 +4,15 @@ import SwiftUI
 /// Writes PNGs of the app's own windows for `make shot`: `screencapture` needs
 /// Screen Recording permission, but a window can always render itself.
 ///
-///   DISPLAYDIAL_SNAPSHOT_DIR   where to write the PNGs
-///   DISPLAYDIAL_SETTINGS_TAB   also open Settings on that tab
+///   MONITORER_SNAPSHOT_DIR   where to write the PNGs
+///   MONITORER_SETTINGS_TAB   also open Settings on that tab
 enum WindowSnapshot {
-    static let isActive = ProcessInfo.processInfo.environment["DISPLAYDIAL_SNAPSHOT_DIR"] != nil
+    static let isActive = ProcessInfo.processInfo.environment["MONITORER_SNAPSHOT_DIR"] != nil
 
     @MainActor
     static func scheduleIfRequested(model: MonitorModel) {
         let environment = ProcessInfo.processInfo.environment
-        guard let directory = environment["DISPLAYDIAL_SNAPSHOT_DIR"] else { return }
+        guard let directory = environment["MONITORER_SNAPSHOT_DIR"] else { return }
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             // A menu bar panel can't be opened from code, so its content gets a window of its own.
@@ -24,7 +24,7 @@ enum WindowSnapshot {
             window.center()
             window.orderFrontRegardless()
 
-            if let tab = environment["DISPLAYDIAL_SETTINGS_TAB"], !tab.isEmpty {
+            if let tab = environment["MONITORER_SETTINGS_TAB"], !tab.isEmpty {
                 UserDefaults.standard.set(tab, forKey: SettingsTab.storageKey)
                 NSApp.activate()
                 // `showSettingsWindow:` does nothing for SwiftUI's Settings scene; the ⌘, item does.

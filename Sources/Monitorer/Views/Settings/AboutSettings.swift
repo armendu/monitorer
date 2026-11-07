@@ -30,7 +30,7 @@ struct AboutSettings: View {
                     Link("m1ddc", destination: AppInfo.m1ddcURL)
                 }
             } footer: {
-                Text("DisplayDial talks to the monitor over DDC/CI through m1ddc, which does the actual work.")
+                Text("Monitorer talks to the monitor over DDC/CI through m1ddc, which does the actual work.")
             }
 
             Section {

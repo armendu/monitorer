@@ -1,4 +1,4 @@
-# DisplayDial
+# Monitorer
 
 A macOS menu bar app for controlling an external monitor over DDC/CI, built on [m1ddc](https://github.com/waydabber/m1ddc): brightness, contrast, volume and mute, input switching (with LG's alternate input codes), saved presets, a one-click return to each monitor's default brightness and contrast, and optional global shortcuts (⌃⌥⌘↑ / ⌃⌥⌘↓) for brightness.
 
@@ -14,7 +14,7 @@ Everything runs from the Makefile; `make` on its own lists every target.
 
 ```sh
 make build       # Debug build, a compile check
-make release     # Release build, packaged as build/DisplayDial.app
+make release     # Release build, packaged as build/Monitorer.app
 make test        # unit tests, no monitor needed
 make live-test   # read-only check against the connected monitor
 make run         # Release build, then launch it (quits a running copy first)
@@ -28,12 +28,12 @@ make bump        # raise the version in VERSION (PART=minor|major)
 ## Layout
 
 ```
-Sources/DisplayDial/
+Sources/Monitorer/
   App/              entry point, window snapshots
   Model/            m1ddc wrapper, MonitorModel, presets, preferences
   Views/            menu bar panel and its menu-item styles
   Views/Settings/   one file per Settings tab
-Tests/DisplayDialTests/   Swift Testing, against a fake m1ddc
+Tests/MonitorerTests/   Swift Testing, against a fake m1ddc
 Resources/AppIcon.icns    checked in; drawn by Scripts/make-icon.swift
 ```
 
@@ -48,4 +48,4 @@ Resources/AppIcon.icns    checked in; drawn by Scripts/make-icon.swift
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md). DisplayDial is released under the [MIT License](LICENSE).
+See [CONTRIBUTING.md](CONTRIBUTING.md). Monitorer is released under the [MIT License](LICENSE).

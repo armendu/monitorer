@@ -2,11 +2,11 @@
 import PackageDescription
 
 let package = Package(
-    name: "DisplayDial",
+    name: "Monitorer",
     platforms: [.macOS(.v26)],
     targets: [
-        .executableTarget(name: "DisplayDial", path: "Sources/DisplayDial"),
-        .testTarget(name: "DisplayDialTests", dependencies: ["DisplayDial"], path: "Tests/DisplayDialTests"),
+        .executableTarget(name: "Monitorer", path: "Sources/Monitorer"),
+        .testTarget(name: "MonitorerTests", dependencies: ["Monitorer"], path: "Tests/MonitorerTests"),
     ],
     swiftLanguageModes: [.v5]
 )

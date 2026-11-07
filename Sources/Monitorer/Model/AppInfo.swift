@@ -1,7 +1,7 @@
 import Foundation
 
 enum AppInfo {
-    static let name = "DisplayDial"
+    static let name = "Monitorer"
     static let creator = "Armend Ukëhaxhaj"
     static let creatorURL = URL(string: "https://github.com/armendu")!
     static let m1ddcURL = URL(string: "https://github.com/waydabber/m1ddc")!
