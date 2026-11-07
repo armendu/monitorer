@@ -103,7 +103,11 @@ ignored rather than trusted. `9388` is also what `get input-alt` returns: it's m
 when the monitor gives it nothing useful, not a value.
 
 **An LG can't report its input.** It switches only with `input-alt`, and `get input` answers `15`
-(DisplayPort) whatever it shows: measured three times with the Mac on HDMI 1. With LG codes on
+(DisplayPort) whatever it shows. Measured: a well-formed reply of `15` (max `18`) on HDMI 1, and
+37 readings in a row of `15` while the owner switched to HDMI 2, DisplayPort and back with the
+monitor's joystick. Reading over LG's own addressing (source `0x50` instead of `0x51`, sent
+directly through `IOAVService`) gets no reply at all, just noise; that's where `9388` comes from.
+macOS keeps listing the monitor while it shows another input, so that can't tell you either. With LG codes on
 (the default), Monitorer doesn't read the input at all and shows the one it last switched that
 monitor to (`lastInputs`, per display UUID), or none until the first switch. With LG codes off,
 other brands are read as before; `InputSource(code:)` accepts standard and LG codes.
