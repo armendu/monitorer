@@ -44,7 +44,7 @@ Resources/AppIcon.icns    checked in; drawn by Scripts/make-icon.swift
 - **`m1ddc get mute` and `get input` work** even though m1ddc's help doesn't list them. Mute reads 1 (on) or 2 (off); a read straight after a write can return garbage, which the app ignores.
 - **A read that overlaps a write is stale.** The model drops it rather than snapping the slider back (`writeGeneration`), and coalesces slider drags into one write per value.
 - **Agents can't take screenshots here** (no Screen Recording permission). `make shot` has the app render its own windows; the menu bar panel gets a window of its own, since a panel can't be opened from code. Liquid Glass doesn't show up in these captures. Snapshot copies read the monitor but never write to it (`RunMode.isReadOnly`), so they can run beside the copy in use.
-- Tested on an LG UltraGear 34GS95QE over DisplayPort: brightness, contrast, volume and mute read and write correctly. Input switching hasn't been tried, since switching away blanks the Mac's screen.
+- Tested on an LG UltraGear 34GS95QE on HDMI 1: brightness, contrast, volume and mute read and write correctly. The LG can't report which input it's showing (it always answers DisplayPort), so the menu shows the input Monitorer last switched to. Input switching hasn't been tried, since switching away blanks the Mac's screen.
 
 ## Contributing
 

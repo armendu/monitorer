@@ -294,10 +294,48 @@ import Testing
 
     @Test func refreshReadsMuteAndInput() async {
         let model = makeModel(FakeRunner(handler: Fixtures.monitor(mute: 1, input: 17)))
+        model.useLGAlt = false
         await model.refresh()
 
         #expect(model.isMuted)
         #expect(model.currentInput == .hdmi1)
+    }
+
+    @Test func lgMonitorsReportedInputIsNotTrusted() async {
+        // The real LG on HDMI 1 answers `get input` with 15, DisplayPort.
+        let runner = FakeRunner(handler: Fixtures.monitor(input: 15))
+        let model = makeModel(runner)
+        await model.refresh()
+
+        #expect(model.currentInput == nil)
+        #expect(await !runner.calls.contains { $0.suffix(2) == ["get", "input"] })
+    }
+
+    @Test func lgShowsTheLastSwitchedInputAcrossLaunches() async {
+        let defaults = UserDefaults.scratch()
+        let model = makeModel(FakeRunner(handler: Fixtures.monitor(listing: Fixtures.withLGAndDell, input: 15)), defaults: defaults)
+        await model.refresh()
+        model.switchInput(.hdmi1)
+        await model.flush()
+        await model.refresh()
+        #expect(model.currentInput == .hdmi1)
+
+        // Remembered per monitor: the Dell was never switched.
+        model.select(Fixtures.dellUUID)
+        await model.refresh()
+        #expect(model.currentInput == nil)
+
+        let relaunched = makeModel(FakeRunner(handler: Fixtures.monitor(listing: Fixtures.withLG, input: 15)), defaults: defaults)
+        await relaunched.refresh()
+        #expect(relaunched.currentInput == .hdmi1)
+    }
+
+    @Test func readOnlyCopyDoesNotRememberInputs() async {
+        let defaults = UserDefaults.scratch()
+        let model = MonitorModel(defaults: defaults, locate: { M1DDC(runner: FakeRunner(handler: Fixtures.monitor())) }, isReadOnly: true)
+        await model.refresh()
+        model.switchInput(.hdmi2)
+        #expect(defaults.data(forKey: PreferenceKey.lastInputs) == nil)
     }
 
     @Test func implausibleMuteReadingIsIgnored() async {
@@ -310,10 +348,12 @@ import Testing
 
     @Test func unknownOrUnsupportedInputShowsNoSelection() async {
         let usbC = makeModel(FakeRunner(handler: Fixtures.monitor(input: 27)))
+        usbC.useLGAlt = false
         await usbC.refresh()
         #expect(usbC.currentInput == nil)
 
         let unsupported = makeModel(FakeRunner(handler: Fixtures.monitor(mute: nil, input: nil)))
+        unsupported.useLGAlt = false
         await unsupported.refresh()
         #expect(unsupported.currentInput == nil)
         #expect(!unsupported.isMuted)
@@ -322,6 +362,7 @@ import Testing
 
     @Test func switchedInputSurvivesRefresh() async {
         let model = makeModel(FakeRunner(handler: Fixtures.monitor(input: 15)))
+        model.useLGAlt = false
         await model.refresh()
         #expect(model.currentInput == .displayPort)
 

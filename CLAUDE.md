@@ -4,7 +4,7 @@ A SwiftUI menu bar app that controls an external monitor over DDC/CI by running
 [m1ddc](https://github.com/waydabber/m1ddc). See [README.md](README.md) for the user-facing
 picture; this file is the part it doesn't say out loud.
 
-Everything here was measured on an **LG UltraGear 34GS95QE over DisplayPort, on an Apple
+Everything here was measured on an **LG UltraGear 34GS95QE connected to its HDMI 1 port, on an Apple
 Silicon MacBook running macOS 27**. A claim about another monitor is a guess until someone
 with that monitor confirms it.
 
@@ -97,13 +97,16 @@ the language mode is **Swift 5**.
 
 ## Things that will bite you
 
-**m1ddc's help undersells it.** `get mute` and `get input` work although they aren't listed.
-Mute reads `1` (on) or `2` (off). A read straight after a write once returned `9388`, so
-anything outside 1 and 2 is ignored rather than trusted.
+**m1ddc's help undersells it.** `get mute` works although it isn't listed. Mute reads `1` (on)
+or `2` (off). A read straight after a write once returned `9388`, so anything outside 1 and 2 is
+ignored rather than trusted. `9388` is also what `get input-alt` returns: it's m1ddc's answer
+when the monitor gives it nothing useful, not a value.
 
-**LG monitors switch inputs only with `input-alt`, but report with the standard code.**
-`set input-alt 144` switches to HDMI 1; `get input` then says `17`. `InputSource(code:)`
-accepts either. The setting is on by default and only matters for other brands.
+**An LG can't report its input.** It switches only with `input-alt`, and `get input` answers `15`
+(DisplayPort) whatever it shows: measured three times with the Mac on HDMI 1. With LG codes on
+(the default), Monitorer doesn't read the input at all and shows the one it last switched that
+monitor to (`lastInputs`, per display UUID), or none until the first switch. With LG codes off,
+other brands are read as before; `InputSource(code:)` accepts standard and LG codes.
 
 **One m1ddc process at a time, reads included.** A DDC read is an I2C write then a read, and
 another process's write landing in between corrupts the reply. `M1DDC` wraps its runner in a
@@ -150,9 +153,10 @@ never writes to it (`RunMode.isReadOnly`), so it can run beside the copy in use.
 **Don't `pkill Monitorer` while testing** other than through `make run`, which means to
 replace the running copy. Stop anything else you launch by its PID.
 
-**Input switching hasn't been tried on hardware.** Switching away from DisplayPort blanks the
-Mac's screen, and the Mac may then not see the monitor to switch back. That's why the panel
-asks before switching rather than acting on one click.
+**Input switching hasn't been tried on hardware.** Switching away from the Mac's input blanks the
+Mac's screen, and the Mac may then not see the monitor to switch back. That's why the first
+switch asks. After it's confirmed once, `askBeforeSwitchingInput` turns off and switching is one
+click; the owner found asking every time annoying. Settings › General turns it back on.
 
 **The app was called DisplayDial until 1.5.0**, bundle ID `com.armend.DisplayDial`; it's now
 `com.armendu.Monitorer` (the owner's GitHub handle, not `com.armend`). Settings are keyed by

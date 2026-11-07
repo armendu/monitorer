@@ -5,6 +5,7 @@ struct GeneralSettings: View {
     @Environment(MonitorModel.self) private var model
     @Environment(BrightnessShortcuts.self) private var shortcuts
     @AppStorage(PreferenceKey.brightnessShortcuts) private var brightnessShortcuts = false
+    @AppStorage(PreferenceKey.askBeforeSwitchingInput) private var askBeforeSwitching = true
     @State private var launchAtLogin = SMAppService.mainApp.status == .enabled
     @State private var loginItemError: String?
 
@@ -34,10 +35,11 @@ struct GeneralSettings: View {
 
             Section {
                 Toggle("Use LG input codes", isOn: $model.useLGAlt)
+                Toggle("Ask before switching inputs", isOn: $askBeforeSwitching)
             } header: {
                 Text("Input Switching")
             } footer: {
-                Text("LG monitors only switch inputs with m1ddc's alternate addressing. Turn this off for other brands.")
+                Text("LG monitors only switch inputs with m1ddc's alternate addressing, and can't report which input they're showing, so the menu shows the input Monitorer last switched to. Turn LG codes off for other brands. Asking turns itself off after the first switch you confirm.")
             }
 
             Section("Monitor") {
@@ -61,7 +63,7 @@ struct GeneralSettings: View {
             }
         }
         .formStyle(.grouped)
-        .frame(height: 540)
+        .frame(height: 600)
         .onChange(of: brightnessShortcuts) { shortcuts.apply(enabled: brightnessShortcuts) }
         .alert("Launch at Login", isPresented: Binding(
             get: { loginItemError != nil },

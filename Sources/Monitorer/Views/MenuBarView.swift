@@ -7,6 +7,7 @@ struct MenuBarView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var isNamingPreset = false
     @State private var confirmingInput: InputSource?
+    @AppStorage(PreferenceKey.askBeforeSwitchingInput) private var askBeforeSwitching = true
     @State private var newPresetName = ""
 
     var body: some View {
@@ -131,8 +132,15 @@ struct MenuBarView: View {
             ForEach(InputSource.allCases) { input in
                 Button {
                     // Switching away can blank this Mac's screen, with only the monitor's own
-                    // buttons to get back, so it asks first rather than acting on a misclick.
-                    confirmingInput = input == model.currentInput ? nil : input
+                    // buttons to get back, so the first switch asks. After that, asking every
+                    // time was just in the way (Settings can turn it back on).
+                    if input == model.currentInput {
+                        confirmingInput = nil
+                    } else if askBeforeSwitching {
+                        confirmingInput = input
+                    } else {
+                        model.switchInput(input)
+                    }
                 } label: {
                     Label(input.title, systemImage: input.symbol)
                 }
@@ -159,6 +167,7 @@ struct MenuBarView: View {
                 Button("Switch") {
                     model.switchInput(input)
                     confirmingInput = nil
+                    askBeforeSwitching = false
                 }
                 .keyboardShortcut(.defaultAction)
                 .buttonStyle(.borderedProminent)

@@ -44,6 +44,13 @@ final class MonitorModel {
         didSet { defaults.set(try? JSONEncoder().encode(pictureDefaults), forKey: PreferenceKey.pictureDefaults) }
     }
 
+    /// Per display UUID: the input Monitorer last switched it to. An LG answers `get input`
+    /// with DisplayPort (15) whatever it shows, measured with the Mac on HDMI 1, so with LG
+    /// codes on this is the only trustworthy answer.
+    private(set) var lastInputs: [String: InputSource] {
+        didSet { defaults.set(try? JSONEncoder().encode(lastInputs), forKey: PreferenceKey.lastInputs) }
+    }
+
     private let defaults: UserDefaults
     private let locate: () -> M1DDC?
     /// Snapshot copies read the monitor but never write to it.
@@ -77,6 +84,8 @@ final class MonitorModel {
             .flatMap { try? JSONDecoder().decode([Preset].self, from: $0) } ?? Preset.defaults
         pictureDefaults = defaults.data(forKey: PreferenceKey.pictureDefaults)
             .flatMap { try? JSONDecoder().decode([String: PictureDefaults].self, from: $0) } ?? [:]
+        lastInputs = defaults.data(forKey: PreferenceKey.lastInputs)
+            .flatMap { try? JSONDecoder().decode([String: InputSource].self, from: $0) } ?? [:]
 
         // The model lives as long as the app, so the observer is never removed.
         NotificationCenter.default.addObserver(
@@ -175,9 +184,14 @@ final class MonitorModel {
         let mute = try? await readUnlessWritten("mute", from: display, using: ddc)
         guard stillSelected() else { return }
         if let mute, mute == 1 || mute == 2 { isMuted = mute == 1 }
-        let code = try? await readUnlessWritten("input", from: display, using: ddc)
-        guard stillSelected() else { return }
-        if let code { currentInput = InputSource(code: code) }
+        if useLGAlt {
+            // Not read at all: an LG's answer is always DisplayPort, so nothing is better than that.
+            currentInput = lastInputs[display.id]
+        } else {
+            let code = try? await readUnlessWritten("input", from: display, using: ddc)
+            guard stillSelected() else { return }
+            if let code { currentInput = InputSource(code: code) }
+        }
 
         // The first reading of a monitor is the best guess at its defaults: nothing has changed
         // it yet. Only values actually read count, not ones the user set while reading.
@@ -231,6 +245,7 @@ final class MonitorModel {
 
     func switchInput(_ input: InputSource) {
         currentInput = input
+        if let display = selected, !isReadOnly { lastInputs[display.id] = input }
         enqueue("input", [useLGAlt ? "input-alt" : "input", String(input.code(lgAlt: useLGAlt))])
     }
 

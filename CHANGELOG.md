@@ -3,6 +3,14 @@
 Every pull request raises the version (`make bump`) and adds a section here for it, written for
 people who use the app.
 
+## 1.5.1 (2026-11-07)
+
+* The menu no longer shows DisplayPort as the current input on LG monitors, which report
+  DisplayPort whatever they show. It now shows the input you last switched to with Monitorer,
+  and none until you've switched once.
+* Switching inputs asks only the first time. Turn **Ask before switching inputs** back on in
+  Settings › General to be asked every time.
+
 ## 1.5.0 (2026-11-07)
 
 * DisplayDial is now called Monitorer. Presets, each monitor's default brightness and contrast,
