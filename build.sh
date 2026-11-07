@@ -23,7 +23,7 @@ cat > "$APP/Contents/Info.plist" <<PLIST
     <key>CFBundleDisplayName</key><string>Monitorer</string>
     <key>CFBundleExecutable</key><string>Monitorer</string>
     <key>CFBundleIconFile</key><string>AppIcon</string>
-    <key>CFBundleIdentifier</key><string>com.armend.Monitorer</string>
+    <key>CFBundleIdentifier</key><string>com.armendu.Monitorer</string>
     <key>CFBundleName</key><string>Monitorer</string>
     <key>CFBundlePackageType</key><string>APPL</string>
     <key>CFBundleShortVersionString</key><string>${VERSION}</string>

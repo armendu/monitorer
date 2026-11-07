@@ -154,9 +154,9 @@ replace the running copy. Stop anything else you launch by its PID.
 Mac's screen, and the Mac may then not see the monitor to switch back. That's why the panel
 asks before switching rather than acting on one click.
 
-**The app was called DisplayDial until 1.5.0**, bundle ID `com.armend.DisplayDial`. Settings
-are keyed by bundle ID, so `SettingsMigration` copies `PreferenceKey.all` from the old domain
-once at launch. A new user-chosen setting belongs in `PreferenceKey.all`, or a future rename
+**The app was called DisplayDial until 1.5.0**, bundle ID `com.armend.DisplayDial`; it's now
+`com.armendu.Monitorer` (the owner's GitHub handle, not `com.armend`). Settings are keyed by
+bundle ID, so `SettingsMigration` copies `PreferenceKey.all` from the old domain once at launch. A new user-chosen setting belongs in `PreferenceKey.all`, or a future rename
 loses it. The old name is meant to appear in `SettingsMigration.swift` and nowhere else.
 
 **Launch at login is untested.** `SMAppService.mainApp.register()` may refuse an ad hoc
