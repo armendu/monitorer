@@ -1,0 +1,62 @@
+name: CI
+
+# Main and pull requests only. Day-to-day work happens on `development`, and what matters
+# about a commit there is whether it survives the pull request into main, which the
+# `pull_request` trigger covers.
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# Actions are pinned to commit SHAs, not tags: a tag is mutable, so `@v7` is a promise the
+# action's owner can rewrite under us. The trailing comment is the human-readable version.
+jobs:
+  build:
+    # Pinned rather than `macos-latest`, so an image migration can't change the toolchain
+    # under a pull request. The app needs the macOS 26 SDK for Liquid Glass.
+    # No monitor is involved: this proves DisplayDial compiles, not that DDC works.
+    runs-on: macos-26
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Toolchain
+        run: xcodebuild -version && swift --version
+
+      # Debug and Release both: they are compiled differently, and a mistake can hide in
+      # either. Release is what `make run` and users get.
+      - name: Debug build
+        run: make build
+
+      - name: Release build
+        run: make release
+
+      - name: Unit tests
+        run: make test
+
+      # Every pull request raises VERSION (`make bump`), so Settings › About says which build
+      # someone has installed, and adds a CHANGELOG.md section for it.
+      - name: Version and changelog
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          git fetch --depth=1 origin "$BASE_REF"
+          base=$(git show FETCH_HEAD:VERSION)
+          head=$(make -s version)
+          echo "$BASE_REF is $base, this pull request is $head"
+          python3 -c '
+          import sys
+          base, head = (tuple(int(p) for p in v.split(".")) for v in sys.argv[1:])
+          sys.exit(0 if head > base else "Raise the version with `make bump`.")
+          ' "$base" "$head"
+          grep -qE "^## ${head//./\\.}( |$)" CHANGELOG.md \
+            || { echo "CHANGELOG.md has no section for $head; add one under its heading."; exit 1; }

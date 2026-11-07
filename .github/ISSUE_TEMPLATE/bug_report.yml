@@ -1,0 +1,48 @@
+name: Bug report
+description: Something is wrong, like a slider that doesn't change the monitor, a wrong reading, or a crash.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting. DDC support differs between monitors and connections, so the
+        details below matter more than usual.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What you did, what you expected, and what happened instead.
+    validations:
+      required: true
+  - type: input
+    id: monitor
+    attributes:
+      label: Monitor model and connection
+      description: e.g. "LG UltraGear 34GS95QE, DisplayPort over USB-C". Mention any dock or hub in between.
+    validations:
+      required: true
+  - type: input
+    id: mac
+    attributes:
+      label: Mac model and macOS version
+      placeholder: e.g. MacBook Pro 14-inch, M3 Pro, macOS 27.0.1
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: DisplayDial version
+      description: From Settings › About, or the commit you built from (`git rev-parse --short HEAD`).
+    validations:
+      required: true
+  - type: textarea
+    id: m1ddc
+    attributes:
+      label: What m1ddc reports
+      description: Output of `m1ddc display list detailed` and `m1ddc get luminance`.
+      render: text
+  - type: textarea
+    id: extra
+    attributes:
+      label: Anything else?
+      description: Screenshots, logs, or the steps that reproduce it.

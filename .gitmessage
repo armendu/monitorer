@@ -1,0 +1,11 @@
+# <type>(<scope>): <summary in the imperative, lower case, no full stop>
+#
+# Types:  feat fix docs test build ci refactor perf chore revert
+# Scopes: ddc app ui build ci  (omit if it spans everything)
+#
+# Keep the subject under ~72 characters. Then leave a blank line and explain
+# WHY, if why is not obvious. Skip the body entirely for a one-line change.
+#
+#   fix(ddc): give up on an m1ddc call after 5 seconds
+#   feat(ui): confirm before switching inputs
+#   docs: explain the stale-read guard in CLAUDE.md
